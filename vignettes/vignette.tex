@@ -1,0 +1,46 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{a4wide}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{amsfonts,amsmath,amssymb,amsthm}
+\usepackage{verbatim,float}
+\usepackage{graphicx,subfigure,url}
+\usepackage{natbib}
+
+% \VignetteIndexEntry{An R package for the SINGLE algorithm}
+
+\usepackage{Sweave}
+\begin{document}
+\input{vignette-concordance}
+
+\title{{\tt SINGLE} Package Vignette}
+%\normalsize
+%\end{center}
+\author{Ricardo Pio Monti, Christoforos Anagnostopoulos and Giovanni Montana}
+\maketitle
+
+Given multiple longitudinal time series we are often interested in quantifying the relationship between the time series over time. For example, given fMRI data corresponding to various regions of interest in the brain we may be interested in measuring their statistical dependencies over time. These relationships can subsequently be summarised as graphs or networks where each node corresponds to a time series (e.g., a BOLD time series for a region of interest) and edges between nodes (or their absence) provide information regarding the nature of the pairwise relationship. Here we present a short tutorial and introduction to using the \verb+R+ package \verb+SINGLE+ to estimate such dynamic graphs over time from noisy time series data. The \verb+SINGLE+ package provides an implementation of the Smooth Incremental Graphical Lasso Estimation algorithm, full details of which can be found in \citep{MYREF}.
+
+\newpage
+\section{Introduction}
+
+There is an increasing interest in summarising the relationships between time series using undirected graphs.  Here each node represents a time series (e.g., this can be the BOLD time series for a brain region) and the edge structure serves to summarise the statistical relationship between nodes. Edge structure is commonly estimated using partial correlations. In this case, the absence of an edge between two nodes implies that the two nodes are conditionally independent given all other nodes. 
+
+However it is often the case that only a global graph is estimated using the entire time series. Whilst this may be appropriate in some scenarios, it is often the case that we expect the statistical dependencies between nodes to change over time. A clear example of this can be seen by considering fMRI time series of a subject performing alternating tasks: we naturally expect the relationship between brain regions to change depending on task.
+
+In this vignette, we introduce the \verb+SINGLE+ package which can be used to estimate dynamic graphs from noisy time series data. The remainder of this vignette is organised as follows: in Section \ref{sec:motivation} we give a brief motivating example to show the capabilities of the SINGLE algorithm. In Section \ref{sec:background} we give a brief background description of the SINGLE algorithm. Finally, in Section \ref{sec:functions} we give a more detailed description of each of the functions in the \verb+SINGLE+ package and their usage.
+\section{Motivating example}
+\label{sec:motivation}
+
+Here we present a brief motivational example to show the capabilities of the SINGLE algorithm and the functionality of the \verb+SINGLE+ package. 
+The main function is the \verb+SINGLE+ function which provides an implementation of the Smooth Incremental Graphical Lasso Estimation (SINGLE) algorithm. Here we give a brief illustration of how the SINGLE algorithm can be used to estimate non-stationary networks.
+
+We begin by simulating non-stationary data in order to test the performance of the SINGLE algorithm. We simulate the data using the \verb+generate_random_data+ function:
+
+\begin{Schunk}
+\begin{Sinput}
+> library('SINGLE')
